@@ -1,0 +1,111 @@
+package distributions.density_function;
+
+public class StudentT extends PDF {
+    private int df;             
+    private double coefficient;
+         
+    public StudentT(int df) {
+        super(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, false);
+        if(df <= 0) {
+            throw new IllegalArgumentException("Illegal degree of freedom : less than 1");
+        }
+        this.df = df;
+        coefficient = coefficient();
+    }
+    
+    public double density(double x) {
+        if(df == 1) {
+            return coefficient * 1 / (1 + x * x);
+        } else if(df == 2) {
+            return coefficient * 1 / Math.pow(2 + x * x, 1.5);
+        } else if(df == 3) {
+            return coefficient * 1 / Math.pow(3 + x * x, 2);
+        }
+        return coefficient * Math.pow(1 + (x * x / df), -0.5 * (df + 1));
+    }
+    
+    public int df() {
+        return df;
+    }
+        
+    public double cumulativeProbability(double lowerBound, double upperBound) {
+        if(df > 10500) {
+            throw new IllegalStateException("Degrees of freedom is too large to" + 
+                                            "calculate cumulative probability");
+        }
+        return super.cumulativeProbability(lowerBound, upperBound);
+    }
+     
+    public double inverse(double area) {
+        return super.inverse(-18, 18, area);
+    }
+    
+    public double median() {
+        return 0;
+    }
+    
+    public double mean() {
+        return 0;
+    }
+    
+    public String toString() {
+        return " ~ t(" + df + ")";
+    }
+    
+    public double variance() {
+        if(df <= 2) {
+            return Double.NaN;
+        } else {
+            return (double) df / df - 2;
+        }
+    }
+    
+    public double integral(double x) {
+        if(df == 1) {
+            return Math.atan(x) / Math.PI;
+        } else if(df == 2) {
+            return 0.5 * x / Math.sqrt(x * x + 2);
+        } else if(df == 3) {
+            return 6 * Math.sqrt(3) / (Math.PI * Math.pow(3 + x * x, 2));
+        } else {
+            return coefficient * Math.sqrt(df) * cosineReduction(df - 1, x);
+        }
+    }
+    
+    private double coefficient() {
+        if(df == 1) {
+            return 1 / Math.PI;
+        } else if (df == 2) {
+            return 1;
+        } else if (df == 3) {
+            return 6 * Math.sqrt(3) / Math.PI;
+        } else {
+            double coefficient = 1;
+            if(df % 2 == 0) {
+                coefficient = 1 / (2.0 * Math.sqrt(df));
+                for(int i = df - 1; i >= 3; i = i - 2) {
+                    coefficient = coefficient * i / (i - 1);
+                }
+            } else {
+               coefficient = (df - 1) / (Math.PI * Math.sqrt(df));
+               for(int i = df - 3; i >= 2; i = i - 2) {
+                   coefficient = coefficient * i / (i + 1);
+               }
+            }
+            return coefficient;
+        }
+    }
+    
+    private double cosineReduction(int degree, double x) {
+        if(degree == 1) {
+            return x / Math.sqrt(df + x * x);
+        } else if(degree == 2) {
+            double angle = Math.atan(x / Math.sqrt(df));
+            return 0.5 * angle + 0.25 * Math.sin(2 * angle);
+        } else {
+            double product = x / Math.sqrt(df + x * x) * 
+                             Math.pow(Math.sqrt(df / (df + x * x)), degree - 1) / degree;
+            return product + cosineReduction(degree - 2, x) * (degree - 1) / degree;
+        }
+    }
+}
