@@ -9,7 +9,7 @@ import java.util.*;
  * 
  * In order to extend this class, a Probability Distribution class should indicate
  *     1/ mean
- *     2/ variance
+ *     2/ variance 
  *     3/ median
  */
 public abstract class DistributionFunction {
