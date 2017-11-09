@@ -1,8 +1,6 @@
 package distributions.density_function;
-
-/* 
- * This class defines the exponential distribution, which is the density
- * function's version of Poission distribution. And this function is especially
+/* This class defines the exponential distribution, which is the density
+ * function's version of Poission function. And this function is especially
  * helpful for modeling population growth 
  */
 

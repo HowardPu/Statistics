@@ -1,7 +1,6 @@
 package distributions.density_function;
 
-/* 
- * This class defines a general probability density function, 
+/* This class defines a general probability density function, 
  * which is the probability distribution that is continuous 
  * from its lowest bound to the highest bound.
  * 

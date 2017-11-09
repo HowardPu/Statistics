@@ -1,11 +1,9 @@
 package distributions.density_function;
 
-/* 
- * This defines a Student-T distribution.
+/* This defines a Student-T distribution.
  * This distribution may be useful for analyzing sample
  * and bivariate correlation
  */
-
 public class StudentT extends PDF {
     private int df;             
     private double coefficient;
