@@ -64,8 +64,8 @@ public abstract class PDF extends distributions.DistributionFunction {
                 return Math.max(0, 1 - complement);
             }
         } else {
-            if(x < mean()) {
-                return 1 - toInfinity(2 * mean() - x);
+            if(x < 0) {
+                return 1 - toInfinity(-x);
             } else {
                 double lowerBound = Math.min(x, mean());
                 double upperBound = Math.max(x, mean());

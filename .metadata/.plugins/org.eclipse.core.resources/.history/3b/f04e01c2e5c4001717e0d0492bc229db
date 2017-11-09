@@ -64,8 +64,8 @@ public abstract class PDF extends distributions.DistributionFunction {
                 return Math.max(0, 1 - complement);
             }
         } else {
-            if(x < mean()) {
-                return 1 - toInfinity(2 * mean() - x);
+            if(x < 0) {
+                return 1 - toInfinity(-x);
             } else {
                 double lowerBound = Math.min(x, mean());
                 double upperBound = Math.max(x, mean());
@@ -141,8 +141,6 @@ public abstract class PDF extends distributions.DistributionFunction {
     // take artificial lower bound (low), artificial upper bound (high), and area (0 ~ 1) as input,
     // return a real number such that the area under the probability distribution from negative
     // infinity to the return value is given area.
-    
-    // Note: throw IllegalArgumentException if the given area is less than 0 or greater than 1
     protected double inverse(double low, double high, double area) {
         if(area < 0 || area > 1) {
             throw new IllegalArgumentException("Illeagl area : " + area);
