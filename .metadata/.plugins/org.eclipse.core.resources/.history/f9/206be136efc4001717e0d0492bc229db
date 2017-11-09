@@ -93,8 +93,7 @@ public class Normal extends PDF {
         return integral(highZ) - integral(lowZ) + lowCorrection + highCorrection;
     }
     
-    // take a real number as input
-    // return the indefinite integral(c = 0) at given value
+    // take
     public double integral(double x) {
         double density = density(x * sd + mean);
         if(density == 0) {
@@ -115,11 +114,8 @@ public class Normal extends PDF {
         }    
     }
     
-    // return the string representation of this normal distribution
-    // e.g. if this normal distribution's mean = 0, standard deviation = 1,
-    // then it will return " ~ N(0, 1 ^ 2)"
     public String toString() {
-        return " ~ N(" + mean + ", " + sd + " ^ 2)";
+        return " ~ N(" + mean + ", " + sd + "^2)";
     }
     
     public static void main(String[] args) {

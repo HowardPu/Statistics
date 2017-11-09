@@ -42,7 +42,7 @@ public class StudentT extends PDF {
     // take an area(a real from 0 to 1) as input,
     // return the value such that the area under the StudentT distribution
     // from negative infinity to returned value is given area
-    // Note: throw IllegalArgumentException if the given area is less than 0 or greater than 1
+    // Note: Note: throw IllegalArgumentException if the given area is less than 0 or greater than 1
     public double inverse(double area) {
         return super.inverse(-18, 18, area);
     }

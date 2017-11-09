@@ -72,12 +72,7 @@ public class Normal extends PDF {
     // take a real number as lower and a real number as upper bound as input
     // return the approximate area under this normal distribution from lower bound
     // to upper bound.
-    // Note : throw IllegalStateException if the lower bound is greater than the upper bound
     public double cumulativeProbability(double lowerBound, double upperBound) {
-    	if(lowerBound > upperBound) {
-            throw new IllegalStateException("Illegal bound : lower bound : " + lowerBound + 
-                                               " > upper bound : "  + upperBound);
-        }
         double lowCorrection = 0;
         double lowZ = zScore(lowerBound);
         double highCorrection = 0;
@@ -93,8 +88,6 @@ public class Normal extends PDF {
         return integral(highZ) - integral(lowZ) + lowCorrection + highCorrection;
     }
     
-    // take a real number as input
-    // return the indefinite integral(c = 0) at given value
     public double integral(double x) {
         double density = density(x * sd + mean);
         if(density == 0) {
@@ -115,11 +108,8 @@ public class Normal extends PDF {
         }    
     }
     
-    // return the string representation of this normal distribution
-    // e.g. if this normal distribution's mean = 0, standard deviation = 1,
-    // then it will return " ~ N(0, 1 ^ 2)"
     public String toString() {
-        return " ~ N(" + mean + ", " + sd + " ^ 2)";
+        return " ~ N(" + mean + ", " + sd + "^2)";
     }
     
     public static void main(String[] args) {
