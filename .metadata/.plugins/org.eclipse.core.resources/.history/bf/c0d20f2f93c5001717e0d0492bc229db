@@ -1,0 +1,61 @@
+package distributions.density_function;
+/* This class defines the exponential distribution, which is the density
+ * function's version of Poission function. And this function is especially
+ * helpful for modeling population growth 
+ */
+
+public class Exponential extends PDF {
+    private double lamda;
+    
+    // Take frequency(lamda) as input
+    // construct 
+    public Exponential(double frequency) {
+        super(0, Double.POSITIVE_INFINITY, true);
+        if(frequency <= 0) {
+        	throw new IllegalArgumentException("frequency should be greater than 0 : " + lamda);
+        }
+        lamda = frequency;
+    }
+    
+    public double density(double x) {
+        if(x < 0) {
+            return Double.NaN;
+        } else {
+            return lamda * Math.exp(-lamda * x);
+        }
+    }
+    
+    public double integral(double x) {
+        return -Math.exp(-x * lamda);
+    }
+    
+    public double variance() {
+        return 1 / lamda / lamda;
+    }
+    
+    public double mean() {
+        return  1 / lamda;
+    }
+    
+    public double median() {
+        return Math.log(2) / lamda;
+    }
+    
+    public String toString() {
+        return " ~ EXP(" + lamda + ")";
+    }
+    
+    public double inverse(double area) {
+    	if(area < 0 || area > 1) {
+            throw new IllegalArgumentException("Illeagl area : " + area);
+        }
+        return Math.log(1 - area) / -lamda;
+    }
+    
+    public static void main(String[] args) {
+    	Exponential e = new Exponential(5);
+    	System.out.println(e.toInfinity(2));
+    	System.out.println(e.cumulativeProbability(1, 2));
+    	System.out.println(e.inverse(0.5));
+    }
+}

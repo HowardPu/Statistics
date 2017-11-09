@@ -1,0 +1,55 @@
+package distributions.density_function;
+
+public class Expoential extends PDF {
+    private double lamda;
+    
+    public Expoential(double frequency) {
+        super(0, Double.POSITIVE_INFINITY, true);
+        if(frequency <= 0) {
+        	throw new IllegalArgumentException("frequency should be greater than 0 : " + lamda);
+        }
+        lamda = frequency;
+    }
+    
+    public double density(double x) {
+        if(x < 0) {
+            return 0;
+        } else {
+            return lamda * Math.exp(-lamda * x);
+        }
+    }
+    
+    public double integral(double x) {
+        return -Math.exp(-x * lamda);
+    }
+    
+    public double variance() {
+        return 1 / lamda / lamda;
+    }
+    
+    public double mean() {
+        return  1 / lamda;
+    }
+    
+    public double median() {
+        return Math.log(2) / lamda;
+    }
+    
+    public String toString() {
+        return " ~ EXP(" + lamda + ")";
+    }
+    
+    public double inverse(double area) {
+    	if(area < 0 || area > 1) {
+            throw new IllegalArgumentException("Illeagl area : " + area);
+        }
+        return Math.log(1 - area) / -lamda;
+    }
+    
+    public static void main(String[] args) {
+    	Expoential e = new Expoential(5);
+    	System.out.println(e.toInfinity(2));
+    	System.out.println(e.cumulativeProbability(1, 2));
+    	System.out.println(e.inverse(0.5));
+    }
+}
