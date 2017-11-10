@@ -4,7 +4,7 @@ This statistic package includes the following components:
 
     - Probability Distribution
 
-        - Probability density distributions
+        - Probability density functions
 
             - Normal distribution
 
@@ -18,10 +18,10 @@ This statistic package includes the following components:
 
             - Chi-Square distribution
 
-        - Probability mass distributions
+        - Probability mass functions
 
             - Binomial distribution
-            
+
             - Poisson distribution
 
     - Statistical analysis(coming soon)
