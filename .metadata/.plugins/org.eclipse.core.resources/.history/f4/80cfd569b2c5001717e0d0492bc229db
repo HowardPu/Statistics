@@ -1,7 +1,6 @@
 package distributions.density_function;
 
-/* 
- * This class defines the Normal distribution, this distribution
+/* This class defines the Normal distribution, this distribution
  * is especially useful dealing with large sample because of 
  * central limit theorem.
  */

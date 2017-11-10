@@ -1,0 +1,147 @@
+package distributions.density_function;
+
+public class FDistribution extends PDF {
+    private int df1;
+    private int df2;
+    
+    public FDistribution(int df1, int df2) {
+        super(0, Double.POSITIVE_INFINITY, true);
+        if(df1 <= 0 || df2 <= 0) {
+            throw new IllegalArgumentException("Invalid degree(s) of freedom : df1 = " + df1 + 
+                                               ", df2 = " + df2);    
+        }
+        this.df1 = df1;
+        this.df2 = df2;
+    }
+    
+    public double variance() {
+        if(df2 <= 4) {
+            return Double.NaN;
+        } else {
+            return  2.0 * df2 * df2 * (df1 + df2 - 2) / df1 / (df2 - 2) / (df2 - 2) / (df2 - 4);
+        }
+    }
+    
+    public double mean() {
+        if(df2 <= 2) {
+            return Double.NaN;
+        } else {
+            return (df2 - 2.0) / df2;
+        }
+    }
+    
+    public double median() {
+        return (3 * df1 - 2.0) * df2 / (3 * df2 - 2.0) / df1;
+    }
+    
+    public double density(double x) {
+        if(x < 0) {
+            throw new IllegalArgumentException("x cannot be less than 0 : x = " + x);
+        }
+        double numerator = Math.sqrt(Math.pow(df1 * x, df1) * Math.pow(df2, df2));
+        double denominator = Math.sqrt(Math.pow(df1 * x + df2, df1 + df2));
+        return numerator / denominator / x / beta(0.5 * df1, 0.5 * df2);
+    }
+    
+    public double inverse(double area) {
+        return super.inverse(0, 10 * (df1 + df2), area);
+    }
+    
+    public String toString() {
+        return " ~ F(" + df1 + ", " + df2 + ")";
+    }
+    
+    public double integral(double x) {
+        double sin = Math.sqrt(df1 * x / (df2 + df1 * x));
+        double cosine = Math.sqrt(((double) df2) / (df2 + df1 * x));
+        return 2 / beta(0.5 * df1, 0.5 * df2) * sinCosineReduction(sin, cosine, df1 - 1, df2 - 1);
+    }
+    
+    private double sinCosineReduction(double sin, double cos, int degree1, int degree2) {
+        if(degree1 == 0 && degree2 == 0) {
+            return Math.asin(sin);
+        } else if(degree1 == 0 && degree2 > 0){
+            return cosineReduction(sin, cos, degree2);
+        } else if(degree1 > 0 && degree2 == 0) {
+            return sineReduction(sin, cos, degree1);
+        } else if(degree1 == 1 && degree2 > 0) {
+            return -Math.pow(cos, degree2 + 1) / (degree2 + 1);
+        } else if(degree1 > 0 && degree2 == 1) {
+            return Math.pow(sin, degree1 + 1) / (degree1 + 1);
+        } else { 
+            double product = Math.pow(sin, degree1 + 1) * Math.pow(cos, degree2 - 1) / (degree1 + degree2);
+            return product + (degree2 - 1.0) / (degree1 + degree2) * sinCosineReduction(sin, cos, degree1, degree2 - 2);
+        }
+    }
+    
+    public double integral2(double x) {
+    	double sin = Math.sqrt(df1 * x / (df2 + df1 * x));
+        double cosine = Math.sqrt(((double) df2) / (df2 + df1 * x));
+        double coefficient = 2 / beta(0.5 * df1, 0.5 * df2);
+        int degree1 = df1 - 1;
+        int degree2 = df2 - 1;
+        double result = 0;
+        if(degree1 % 2 == 0 && degree2 % 2 == 0) {
+        	result = Math.asin(sin);
+        } else if(degree1 % 2 != 0 && degree2 % 2 == 0) {
+        	result = -cosine;
+        	degree1--;
+        } else if(degree1 % 2 == 0 && degree2 % 2 != 0) {
+        	result = sin;
+        	degree2--;
+        } else {
+        	result = Math.pow(sin, 2) / 2;
+        	degree1--;
+        	degree2--;
+        }
+        int currentDegree1 = 0;
+        int currentDegree2 = 0;
+        while(currentDegree1 < degree1) {
+        	double next = Math.pow(sin, currentDegree1 + 1) * Math.pow(cosine, currentDegree2 + 1) / 
+        			      (currentDegree1 + 2 + currentDegree2);
+        	result = next + result * (currentDegree1 + 1) / (currentDegree1 + 2 + currentDegree2);
+        	currentDegree1 += 2;
+        }
+        while(currentDegree2 < degree2) {
+        	double next = Math.pow(sin, currentDegree1 + 1) * Math.pow(cosine, currentDegree2 + 1) / 
+  			      (currentDegree1 + 2 + currentDegree2);
+  	        result = next + result * (currentDegree2 + 1) / (currentDegree1 + 2 + currentDegree2);
+        	currentDegree2 += 2;
+        }
+    	return coefficient * result;
+    }
+    
+    private double cosineReduction(double sin, double cos, int degree) {
+        if(degree == 1) {
+            return sin;
+        } else if(degree == 2) {
+            double angle = Math.acos(cos);
+            return 0.5 * angle + 0.25 * Math.sin(2 * angle);
+        } else {
+            double product = sin * Math.pow(cos, degree - 1) / degree;
+            return product + cosineReduction(sin, cos, degree - 2) * (degree - 1) / degree;
+        }
+    }
+    
+    private double sineReduction(double sin, double cos, int degree) {
+        if(degree == 1) {
+            return -cos;
+        } else if(degree == 2) {
+            double angle = Math.asin(sin);
+            return 0.5 * angle - 0.25 * Math.sin(2 * angle);
+        } else {
+            double product = -cos * Math.pow(sin, degree - 1) / degree;
+            return product + sineReduction(sin, cos, degree - 2) * (degree - 1) / degree;
+        }
+    }
+    
+    public static void main(String[] args) {
+    	FDistribution f = new FDistribution(10, 20);
+    	double test1 = f.integral(1.2);
+    	double test2 = f.integral2(1.2);
+    	System.out.println(test1);
+    	System.out.println(test2);
+    	System.out.println(test1 / test2);
+    	
+    }
+}

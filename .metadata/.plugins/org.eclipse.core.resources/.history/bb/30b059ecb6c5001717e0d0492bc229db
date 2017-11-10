@@ -1,0 +1,124 @@
+package distributions.density_function;
+
+/*
+ * This class defines F-Distribution, which is 
+ * especially useful for Analysis of Variance(One Way ANOVA)
+ * (Test where different sets of sample have the same variance)
+ * Or test whether a variable has interaction with other two variables (Two way ANOVA)
+ */
+public class FDistribution extends PDF {
+    private int df1;
+    private int df2;
+    
+    // take numerator degrees of freedom(positive integer) and 
+    //      denominator degrees of freedom(positive integer) as input
+    // construct a FDistribution with given parameters
+    // Note : throw IllegalArgumentException if given degrees of freedoms(either numerator or denominator) is non-positive
+    public FDistribution(int df1, int df2) {
+        super(0, Double.POSITIVE_INFINITY, true);
+        if(df1 <= 0 || df2 <= 0) {
+            throw new IllegalArgumentException("Invalid degree(s) of freedom : df1 = " + df1 + 
+                                               ", df2 = " + df2);    
+        }
+        this.df1 = df1;
+        this.df2 = df2;
+    }
+    
+    // return the variance of this FDistribution
+    // Note: return NaN if the denominator degrees of freedom is not greater than 4
+    public double variance() {
+        if(df2 <= 4) {
+            return Double.NaN;
+        } else {
+            return  2.0 * df2 * df2 * (df1 + df2 - 2) / df1 / (df2 - 2) / (df2 - 2) / (df2 - 4);
+        }
+    }
+    
+    // return the mean of this FDistribution
+    // Note: return NaN if the denominator degrees of freedom is not greater than 2
+    public double mean() {
+        if(df2 <= 2) {
+            return Double.NaN;
+        } else {
+            return (df2 - 2.0) / df2;
+        }
+    }
+    
+    // return the median of this FDistribution
+    public double median() {
+        return (3 * df1 - 2.0) * df2 / (3 * df2 - 2.0) / df1;
+    }
+    
+    public double density(double x) {
+        if(x < 0) {
+            throw new IllegalArgumentException("x cannot be less than 0 : x = " + x);
+        }
+        double numerator = Math.sqrt(Math.pow(df1 * x, df1) * Math.pow(df2, df2));
+        double denominator = Math.sqrt(Math.pow(df1 * x + df2, df1 + df2));
+        return numerator / denominator / x / beta(0.5 * df1, 0.5 * df2);
+    }
+    
+    public double inverse(double area) {
+        return super.inverse(0, 10 * (df1 + df2), area);
+    }
+    
+    public String toString() {
+        return " ~ F(" + df1 + ", " + df2 + ")";
+    }
+    
+    
+    public double integral(double x) {
+    	double sin = Math.sqrt(df1 * x / (df2 + df1 * x));
+        double cosine = Math.sqrt(((double) df2) / (df2 + df1 * x));
+        double coefficient = 2 / beta(0.5 * df1, 0.5 * df2);
+        int degree1 = df1 - 1;
+        int degree2 = df2 - 1;
+        int currentDegree1 = 0;
+        int currentDegree2 = 0;
+        double result = 0;
+        
+        // base case
+        if(degree1 % 2 == 0 && degree2 % 2 == 0) {
+        	// integral of 1 is the angle
+        	result = Math.asin(sin);
+        } else if(degree1 % 2 != 0 && degree2 % 2 == 0) {
+        	// integral of sine is negative cosine
+        	result = -cosine;
+        	currentDegree1++;
+        } else if(degree1 % 2 == 0 && degree2 % 2 != 0) {
+        	// integral of cosine is sine
+        	result = sin;
+        	currentDegree2++;
+        } else {
+        	// the integral of sine times cosine is the half of sine square
+        	result = Math.pow(sin, 2) / 2;
+        	currentDegree1++;
+        	currentDegree2++;
+        }
+        
+        // raise the power of sin into target degrees
+        // by integral reduction
+        while(currentDegree1 < degree1) {
+        	double next = -Math.pow(sin, currentDegree1 + 1) * Math.pow(cosine, currentDegree2 + 1) / 
+        			      (currentDegree1 + 2 + currentDegree2);
+        	result = next + result * (currentDegree1 + 1) / (currentDegree1 + 2 + currentDegree2);
+        	currentDegree1 += 2;
+        }
+        
+        // raise the power of cosine into target degrees
+        // by integral reduction
+        while(currentDegree2 < degree2) {
+        	double next = Math.pow(sin, currentDegree1 + 1) * Math.pow(cosine, currentDegree2 + 1) / 
+  			      (currentDegree1 + 2 + currentDegree2);
+  	        result = next + result * (currentDegree2 + 1) / (currentDegree1 + 2 + currentDegree2);
+        	currentDegree2 += 2;
+        }
+    	return coefficient * result;
+    }
+    
+    public static void main(String[] args) {
+    	FDistribution f = new FDistribution(100, 100);
+    	double test1 = f.cumulativeProbability(1, 2);
+    	System.out.println(test1);
+    }
+}
