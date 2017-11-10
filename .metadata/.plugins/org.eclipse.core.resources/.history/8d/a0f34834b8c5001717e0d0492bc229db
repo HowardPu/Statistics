@@ -1,0 +1,49 @@
+package distributions.density_function;
+
+public class Uniform extends PDF {
+    private double k;
+    private double start;
+    private double end;
+    
+    public Uniform(double start, double end) {
+        super(start, end, false);
+        this.start = start;
+        this.end = end;    
+        this.k = 1 / (end - start);
+    }
+    
+    public double variance() {
+        return 1.0 / 12 * (end - start) * (end - start);
+    }
+    
+    public double mean() {
+        return median();
+    }
+    
+    public double median() {
+        return 0.5 * (start + end);
+    }
+    
+    public double integral(double x) {
+        return density(x) * x;
+    }
+    
+    public double density(double x) {
+        if(x < start || x > end) {
+            return 0;
+        }
+        return k;
+    }
+    
+    public double toInfinity(double x) {
+        return cumulativeProbability(x, end);
+    }
+    
+    public double inverse(double area) {
+        return start + area / k;
+    }
+    
+    public String toString() {
+        return " ~ unif(" + start + ", " + end + ")";
+    }
+}
