@@ -24,6 +24,10 @@ This statistic package includes the following components:
 
             - Poisson distribution
 
+            - Geometric distribution
+
+            - Hypergeometric distribution
+
     - Statistical analysis(coming soon)
 
     - Data processor(coming soon)
