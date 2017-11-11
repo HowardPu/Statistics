@@ -18,6 +18,8 @@ package distributions.density_function;
  */
 
 public abstract class PDF extends distributions.DistributionFunction {
+    private double lowestBound;
+    private double highestBound;
     private boolean isSkew;
     
     // precision of default inverse calculation
@@ -30,8 +32,12 @@ public abstract class PDF extends distributions.DistributionFunction {
     // Take lowestBound, highestBound, and isSkew as input,
     // construct a probability density function for statistical calculation..
     public PDF(double lowestBound, double highestBound, boolean isSkew) {
-        super(lowestBound, highestBound);
+        if(lowestBound >= highestBound) {
+            throw new IllegalArgumentException("Illegal domain of this distribution");
+        }
         this.isSkew = isSkew;
+        this.lowestBound = lowestBound;
+        this.highestBound = highestBound;
     }
     
     // return true if the probability density function is skew.
@@ -48,11 +54,11 @@ public abstract class PDF extends distributions.DistributionFunction {
     // Note : return NaN if x is not in the domain of the probability density function
     //        or the highest bound is not positive infinity.
     public double toInfinity(double x) {
-    	if(checkOutOfBound(x) || super.getHighestBound() != Double.POSITIVE_INFINITY) {
+    	if(checkOutOfBound(x) || highestBound != Double.POSITIVE_INFINITY) {
     		return Double.NaN;
     	}
         if(isSkew) {
-            double complement = cumulativeProbability(super.getLowestBound(), x);
+            double complement = cumulativeProbability(lowestBound, x);
             if(complement < 0) {
                 return 1;
             } else {
@@ -82,7 +88,7 @@ public abstract class PDF extends distributions.DistributionFunction {
     // Note : return NaN if x is not in the domain of the probability density function
     //        or the lowest bound is not negative infinity.
     public double fromNegativeInfinity(double x) {
-    	if(checkOutOfBound(x) || super.getLowestBound() != Double.NEGATIVE_INFINITY) {
+    	if(checkOutOfBound(x) || lowestBound != Double.NEGATIVE_INFINITY) {
     		return Double.NaN;
     	}
     	return 1 - toInfinity(x);
@@ -143,9 +149,9 @@ public abstract class PDF extends distributions.DistributionFunction {
             throw new IllegalArgumentException("Illeagl area : " + area);
         }   
         if(area == 1) {
-            return super.getHighestBound();
+            return highestBound;
         } else if(area == 0) {
-            return super.getLowestBound();
+            return lowestBound;
         } else {
             double currentLow = low;
             double result = (currentLow + high) / 2;
@@ -165,6 +171,6 @@ public abstract class PDF extends distributions.DistributionFunction {
     
     // return true if given real number is not in the domain of this probability density function
     protected boolean checkOutOfBound(double x) {
-    	return x < super.getLowestBound() || x > super.getHighestBound();
+    	return x < lowestBound || x > highestBound;
     }
 }

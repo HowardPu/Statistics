@@ -13,27 +13,6 @@ import java.util.*;
  *     3/ median
  */
 public abstract class DistributionFunction {
-	private double highestBound;
-	private double lowestBound;
-	
-	public DistributionFunction(double lowestBound, double highestBound) {
-		if(lowestBound >= highestBound) {
-            throw new IllegalArgumentException("Illegal domain of this distribution");
-        }
-        this.lowestBound = lowestBound;
-        this.highestBound = highestBound;
-	}
-	
-	// return the lowest bound of this probability distribution
-	public double getLowestBound() {
-		return lowestBound;
-	}
-	
-	// return the highest bound of this probability distribution
-	public double getHighestBound() {
-		return highestBound;
-	}
-	
 	// This list is for speeding the calculation of error function inverse
     private List<Double> coefficient = new ArrayList<Double> ();
     

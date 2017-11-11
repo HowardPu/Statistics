@@ -1,0 +1,25 @@
+package distributions.mass_functions;
+
+public abstract class PMF extends distributions.DistributionFunction {
+    
+    public PMF(double lowestBound, double highestBound) {
+        super(lowestBound, highestBound);
+    }
+    
+    public abstract double mass(int x);
+    
+    public abstract double getCumulativeProbability(int lowerBound, int upperBound);
+    
+    public abstract int inverse(double area);
+    
+    public abstract double mean();
+    
+    public abstract double variance();
+    
+    public double toInfinity(int x) {
+    	if(x == super.getLowestBound()) {
+    		return 1;
+    	}
+    	return 0;
+    }
+}

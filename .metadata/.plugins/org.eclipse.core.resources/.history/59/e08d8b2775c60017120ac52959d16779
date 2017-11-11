@@ -24,16 +24,6 @@ public abstract class DistributionFunction {
         this.highestBound = highestBound;
 	}
 	
-	// return the lowest bound of this probability distribution
-	public double getLowestBound() {
-		return lowestBound;
-	}
-	
-	// return the highest bound of this probability distribution
-	public double getHighestBound() {
-		return highestBound;
-	}
-	
 	// This list is for speeding the calculation of error function inverse
     private List<Double> coefficient = new ArrayList<Double> ();
     

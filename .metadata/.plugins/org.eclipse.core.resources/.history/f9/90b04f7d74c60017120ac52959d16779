@@ -1,0 +1,14 @@
+package distributions.mass_functions;
+
+public abstract class PMF extends distributions.DistributionFunction {
+    private double lowestBound;
+    private double highestBound;
+    
+    public PDF(double lowestBound, double highestBound) {
+        if(lowestBound >= highestBound) {
+            throw new IllegalArgumentException("Illegal domain of this distribution");
+        }
+        this.lowestBound = lowestBound;
+        this.highestBound = highestBound;
+    }
+}
