@@ -26,21 +26,10 @@ public abstract class PMF extends distributions.DistributionFunction {
         super(lowestBound, highestBound);
     }
     
-    // take an integer as input
-    // return the probability mass at given point
-    // return NaN if given integer is out of domain
     public abstract double mass(int x);
     
-    // take two integers as input
-    // return the cumulative probability between two points(inclusive)
-    // Note: return NaN if given integers are out of domain
-    //       throw IllegalArgumentException if lowerBound is greater than upperBound
     public abstract double getCumulativeProbability(int lowerBound, int upperBound);
     
-    // take a real number between 0 and 1(inclusive) as input
-    // return the point where the given area is between the area from 
-    // from the lowest bound to returned value and the area from the lowest
-    // bound to returned value + 1
     public double inverse(double area) {
     	if(area < 0 || area > 1) {
     		throw new IllegalArgumentException("Invalid area : " + area);
@@ -74,19 +63,11 @@ public abstract class PMF extends distributions.DistributionFunction {
     	return middle;
     }
     
-    // return the mean value of this probability mass function
     public abstract double mean();
     
-    // return the variance of this probability mass function
     public abstract double variance();
     
-    // return the cumulative probability from given point to infinity(inclusive)
-    // Note : return NaN if given integers are out of domain
-    //        throw IllegalArgumentException if the highest bound of this PMF is not positive infinity
     public double toInfinity(int x) {
-    	if(super.getHighestBound() != Double.POSITIVE_INFINITY) {
-    		throw new IllegalArgumentException("The highest bound of this PMF is not positive infinity");
-    	}
     	if(x < super.getLowestBound()) {
     		return Double.NaN;
     	}

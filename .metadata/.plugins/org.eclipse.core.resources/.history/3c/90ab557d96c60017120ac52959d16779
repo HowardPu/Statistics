@@ -82,7 +82,7 @@ public abstract class PMF extends distributions.DistributionFunction {
     
     // return the cumulative probability from given point to infinity(inclusive)
     // Note : return NaN if given integers are out of domain
-    //        throw IllegalArgumentException if the highest bound of this PMF is not positive infinity
+    //        
     public double toInfinity(int x) {
     	if(super.getHighestBound() != Double.POSITIVE_INFINITY) {
     		throw new IllegalArgumentException("The highest bound of this PMF is not positive infinity");
