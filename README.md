@@ -16,7 +16,7 @@ This statistic package includes the following components:
 
             - Uniform distribution
 
-            - Chi-Square distribution
+            - Chi-Square distribution(cannot handle large degrees of freedom)
 
         - Probability mass functions
 

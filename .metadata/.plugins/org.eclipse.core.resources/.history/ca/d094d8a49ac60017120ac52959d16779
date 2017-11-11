@@ -1,0 +1,99 @@
+package distributions.mass_functions;
+
+public class Poisson extends PMF {
+    double lambda;
+    
+    public Poisson(double frequency) {
+    	super(0, Double.POSITIVE_INFINITY);
+        if(frequency <= 0) {
+            throw new IllegalArgumentException("Invalid frequency : " + frequency);
+        }
+        lambda = frequency;
+    }
+    
+    public double variance() {
+        return lambda;
+    }
+    
+    public double mean() {
+        return lambda;
+    }
+    
+    public double median() {
+        return lambda + 1.0 / 3 - 0.02 / lambda;
+    }
+    
+    // may not work properly is lambda is too large
+    public double mass(int x) {
+        double result = Math.exp(-lambda);   
+        for(int i = 1; i <= x; i++) {
+            result = result * lambda / i;
+        }
+        return result;
+    }
+    
+    // not work properly if lambda is to large
+    public double getCumulativeProbability(int lowerBound, int upperBound) {
+        if(lowerBound > upperBound) {
+            throw new IllegalArgumentException("Illegal bound : lower bound : " + lowerBound + 
+                                               " > upper bound : "  + upperBound);
+        }
+        if(lowerBound < 0 || upperBound < 0) {
+            throw new IllegalStateException("bound cannot be less than 0");
+        }
+        if(upperBound == lowerBound) {
+            return mass(upperBound);
+        }
+        if(upperBound >= lambda * 30) {
+            upperBound = (int) (30 * lambda + 1);
+        }
+        if(lowerBound >= lambda * 30) {
+            lowerBound = (int) (30 * lambda + 1);
+        }
+        return mass(lowerBound) * poissonExpansion(lowerBound, upperBound);
+    }
+    
+    public double getCumulativeProbability2(int lowerBound, int upperBound) {
+    	double result = probabilityWithCorrection(lowerBound, upperBound, 1);
+    	double coefficient = mass(lowerBound);
+    	int currentDegree = lowerBound;
+    	while(coefficient == 0 || result == Double.POSITIVE_INFINITY) {
+    		System.out.println("trap");
+    		System.out.println(result);
+    		System.out.println(coefficient);
+    	    result = probabilityWithCorrection(lowerBound, upperBound, currentDegree);
+    	    coefficient = mass(currentDegree);
+    		currentDegree--;
+    	}
+    	
+    	return coefficient * result;
+    }
+    
+    private double probabilityWithCorrection(int lowerBound, int upperBound, double correction) {
+    	double result = 1 + lambda / upperBound / correction;
+    	int currentDegree = upperBound - 1;
+    	while(currentDegree > lowerBound) {
+    		result = 1 + lambda * result / currentDegree / correction;
+    		currentDegree--;
+    	}
+    	return result;
+    }
+    
+    
+    
+    private double poissonExpansion(int initial, int end) {
+        if(initial + 1 == end) {
+            return 1 + lambda / end;
+        } else {
+            return 1 + lambda / (initial + 1) * poissonExpansion(initial + 1, end);
+        }    
+    }
+    
+    public static void main(String[] args) {
+    	Poisson p = new Poisson(2000);
+    	int bound1 = 10;
+    	int bound2 = 20;
+    	System.out.println("test 1 : " + p.getCumulativeProbability(bound1, bound2));
+    	System.out.println("test 2 : " + p.getCumulativeProbability2(bound1, bound2));
+    }
+}

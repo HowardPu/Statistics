@@ -1,0 +1,5 @@
+package distributions.mass_functions;
+
+public class Poisson {
+
+}

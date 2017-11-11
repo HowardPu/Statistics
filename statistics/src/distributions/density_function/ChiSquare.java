@@ -86,20 +86,17 @@ public class ChiSquare extends PDF {
         }
         while(currentDegree < df) {
             double product = -2 * Math.pow(x, 0.5 * currentDegree) * Math.exp(-0.5 * x);
+            System.out.println(product);
             result = currentDegree * result + product;
             currentDegree += 2; 
         }
-        return coefficient * result;
+        return coefficient * result + 1;
     }
     
     public static void main(String[] args) {
-        ChiSquare cs = new ChiSquare(100);
+        ChiSquare cs = new ChiSquare(400);
         double lowerBound = 1.12;
-        double upperBound = 99999;
-        double area = 0.99995;
-        double test1 = cs.cumulativeProbability(lowerBound, upperBound);
-        double test2 = cs.inverse(area);
-        System.out.println(test1);
-        System.out.println(test2);
+        double upperBound = 200;
+        System.out.println(cs.cumulativeProbability(lowerBound, upperBound));
     }
 }

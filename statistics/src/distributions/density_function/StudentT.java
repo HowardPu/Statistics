@@ -136,7 +136,7 @@ public class StudentT extends PDF {
     
     // Test function
     public static void main(String[] args) {
-    	StudentT t = new StudentT(99);
-    	System.out.println(t.cumulativeProbability(-1, 3));
+    	StudentT t = new StudentT(1);
+    	System.out.println(t.integral(0));
     }
 }
