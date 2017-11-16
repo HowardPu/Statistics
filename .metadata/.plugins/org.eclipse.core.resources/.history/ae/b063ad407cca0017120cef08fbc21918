@@ -14,7 +14,7 @@ package Utility;
 
 public class Utility {
 	
-    protected static final double MAXGAM = 171.624376956302725;
+	protected static final double MAXGAM = 171.624376956302725;
     protected static final double LOGPI  = 1.14472988584940017414;
 	
     protected static final double MACHEP =  1.11022302462515654042E-16;
