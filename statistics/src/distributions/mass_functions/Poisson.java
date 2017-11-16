@@ -42,6 +42,8 @@ public class Poisson extends PMF {
     	if(lowerBound == upperBound) {
     		return mass(lowerBound);
     	}
+    	// Poisson distribution has relationship with ChiSquare distribution
+    	// since Poission distribution can be expressed in terms of incomplete gamma function
     	ChiSquare upper = new ChiSquare(2 * (upperBound + 1));
     	if(lowerBound == super.getLowestBound()) {
     		return 1 - upper.integral(2 * lambda);

@@ -1,5 +1,7 @@
 package distributions.density_function;
 
+import Utility.Utility;
+
 /*
  * This class defines F-Distribution, which is 
  * especially useful for Analysis of Variance(One Way ANOVA)
@@ -58,7 +60,7 @@ public class FDistribution extends PDF {
         }
         double numerator = Math.sqrt(Math.pow(df1 * x, df1) * Math.pow(df2, df2));
         double denominator = Math.sqrt(Math.pow(df1 * x + df2, df1 + df2));
-        return numerator / denominator / x / beta(0.5 * df1, 0.5 * df2);
+        return numerator / denominator / x / Utility.beta(0.5 * df1, 0.5 * df2);
     }
     
     // take area between 0 and 1(inclusive) as input
@@ -86,7 +88,7 @@ public class FDistribution extends PDF {
     	}
     	double sin = Math.sqrt(df1 * x / (df2 + df1 * x));
         double cosine = Math.sqrt(((double) df2) / (df2 + df1 * x));
-        double coefficient = 2 / beta(0.5 * df1, 0.5 * df2);
+        double coefficient = 2 / Utility.beta(0.5 * df1, 0.5 * df2);
         int degree1 = df1 - 1;
         int degree2 = df2 - 1;
         int currentDegree1 = 0;

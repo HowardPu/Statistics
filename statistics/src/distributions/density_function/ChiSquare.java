@@ -1,5 +1,7 @@
 package distributions.density_function;
 
+import Utility.Utility;
+
 /*
  *  This class defines ChiSquare distribution,
  *  which is especially useful for ChiSquare test
@@ -64,39 +66,25 @@ public class ChiSquare extends PDF {
     }
     
     private double coefficient() {
-        return 1.0 / gamma(0.5 * df) / Math.pow(2, 0.5 * df);
+        return 1.0 / Utility.gamma(0.5 * df) / Math.pow(2, 0.5 * df);
     }
     
     // Take a real number as input
     // return the indefinite integral at given value
     // Note: return NaN if the given value is out of domain
     //       (given value is negative)
+    
     public double integral(double x) {
-    	if(x < 0) {
+    	if(x < 0.0) {
     		return Double.NaN;
     	}
-        double currentDegree = 0;
-        double result = 0;
-        if(df % 2 != 0) {
-            result = Math.sqrt(2 * Math.PI) * erf(Math.sqrt(x / 2));
-            currentDegree = 1;
-        } else {
-            result = -2 * Math.exp(-0.5 * x);
-            currentDegree = 2;
-        }
-        while(currentDegree < df) {
-            double product = -2 * Math.pow(x, 0.5 * currentDegree) * Math.exp(-0.5 * x);
-            System.out.println(product);
-            result = currentDegree * result + product;
-            currentDegree += 2; 
-        }
-        return coefficient * result + 1;
+    	return Utility.incompleteGamma( df/2.0, x/2.0 );
     }
     
     public static void main(String[] args) {
-        ChiSquare cs = new ChiSquare(400);
-        double lowerBound = 1.12;
-        double upperBound = 200;
-        System.out.println(cs.cumulativeProbability(lowerBound, upperBound));
+        ChiSquare cs = new ChiSquare(40);
+        double lowerBound = 30;
+        double upperBound = 40;
+        System.out.println(cs.integral(upperBound) - cs.integral(lowerBound));
     }
 }
