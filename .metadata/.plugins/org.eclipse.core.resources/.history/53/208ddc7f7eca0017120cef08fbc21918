@@ -63,6 +63,10 @@ public class ChiSquare extends PDF {
         return " ~ χ^2(" + df + ")";
     }
     
+    private double coefficient() {
+        return 1.0 / Utility.gamma(0.5 * df) / Math.pow(2, 0.5 * df);
+    }
+    
     // Take a real number as input
     // return the indefinite integral at given value
     // Note: return NaN if the given value is out of domain

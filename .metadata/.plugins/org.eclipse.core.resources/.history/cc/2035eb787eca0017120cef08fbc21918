@@ -689,6 +689,5 @@ public class Utility {
     	System.out.println(test);
     	System.out.println(test2);
     	System.out.println((test2 - test) / test3);
-    	System.out.println(Utility.gamma(400));
     }
 }

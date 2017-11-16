@@ -10,6 +10,7 @@ import Utility.Utility;
 
 public class ChiSquare extends PDF {
     private int df;
+    private double coefficient;
     
     // Take degrees of freedom (positive integer) as input
     // construct a ChiSquare distribution with given degrees of freedom
@@ -20,6 +21,7 @@ public class ChiSquare extends PDF {
             throw new IllegalArgumentException("Invalid degree of freedom : " + df);
         }
         this.df = df;
+        coefficient = coefficient();
     }
     
     // return the variance of this ChiSquare distribution
@@ -44,7 +46,7 @@ public class ChiSquare extends PDF {
         if(x < 0) {
             return Double.NaN;
         } else {
-            return Math.exp(Math.log(x) * (df / 2.0 - 1) - x / 2 - Math.log(2) * df / 2.0) / Utility.gamma(df / 2.0);
+            return coefficient * Math.pow(x, 0.5 * df - 1) * Math.exp(-0.5 * x);
         }
     }
     
@@ -63,6 +65,10 @@ public class ChiSquare extends PDF {
         return " ~ χ^2(" + df + ")";
     }
     
+    private double coefficient() {
+        return 1.0 / Utility.gamma(0.5 * df) / Math.pow(2, 0.5 * df);
+    }
+    
     // Take a real number as input
     // return the indefinite integral at given value
     // Note: return NaN if the given value is out of domain
@@ -72,14 +78,13 @@ public class ChiSquare extends PDF {
     	if(x < 0.0) {
     		return Double.NaN;
     	}
-    	return Utility.incompleteGamma(df / 2.0, x / 2.0);
+    	return Utility.incompleteGamma( df/2.0, x/2.0 );
     }
     
     public static void main(String[] args) {
-        ChiSquare cs = new ChiSquare(4000);
-        double lowerBound = 300;
-        double upperBound = 400;
+        ChiSquare cs = new ChiSquare(40);
+        double lowerBound = 30;
+        double upperBound = 40;
         System.out.println(cs.integral(upperBound) - cs.integral(lowerBound));
-        System.out.println(cs.density(30));
     }
 }

@@ -10,6 +10,7 @@ import Utility.Utility;
 
 public class ChiSquare extends PDF {
     private int df;
+    private double coefficient;
     
     // Take degrees of freedom (positive integer) as input
     // construct a ChiSquare distribution with given degrees of freedom
@@ -20,6 +21,7 @@ public class ChiSquare extends PDF {
             throw new IllegalArgumentException("Invalid degree of freedom : " + df);
         }
         this.df = df;
+        coefficient = coefficient();
     }
     
     // return the variance of this ChiSquare distribution
@@ -61,6 +63,10 @@ public class ChiSquare extends PDF {
     //      it will return " ~ χ^2(3)"
     public String toString() {
         return " ~ χ^2(" + df + ")";
+    }
+    
+    private double coefficient() {
+        return 1.0 / Utility.gamma(0.5 * df) / Math.pow(2, 0.5 * df);
     }
     
     // Take a real number as input
