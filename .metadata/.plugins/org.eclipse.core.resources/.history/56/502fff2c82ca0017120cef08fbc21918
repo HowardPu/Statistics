@@ -135,7 +135,7 @@ public class FDistribution extends PDF {
     }
     
     public double integral2(double x) {
-    	return(Utility.incompleteBeta(df1 / 2.0, df2 / 2.0, df1 * x / (df1 * x + df2)) / Utility.beta(df1 / 2.0, df2 / 2.0));
+    	return(Utility.incompleteBeta(df1 / 2.0, df2 / 2.0, df1 * x / (df1 * x * df2)) / Utility.beta(df1 / 2.0, df2 / 2.0));
     }
     
     public static void main(String[] args) {

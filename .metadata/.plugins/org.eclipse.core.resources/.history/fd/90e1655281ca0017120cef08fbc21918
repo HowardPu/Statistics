@@ -680,9 +680,15 @@ public class Utility {
     }
     
     public static void main(String[] args) {
-    	double test1 = gamma(100);
-    	double test2 = gamma(200);
+    	double a = 20;
+    	double x = 5;
+    	double x2 = 10;
+    	double test = incompleteGamma(a, x);
+    	double test2 = incompleteGamma(a, x2);
+    	double test3 = gamma(a);
+    	System.out.println(test);
     	System.out.println(test2);
-    	System.out.print(test1 / test2 * test1);
+    	System.out.println((test2 - test) / test3);
+    	System.out.println(Utility.gamma(400));
     }
 }

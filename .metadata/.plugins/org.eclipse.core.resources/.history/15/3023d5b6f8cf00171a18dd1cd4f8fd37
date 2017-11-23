@@ -80,6 +80,6 @@ public class ChiSquare extends PDF {
         double lowerBound = 3000;
         double upperBound = 4000;
         System.out.println(cs.integral(upperBound) - cs.integral(lowerBound));
-        System.out.println(cs.density(3000));
+        System.out.println(cs.density(30));
     }
 }

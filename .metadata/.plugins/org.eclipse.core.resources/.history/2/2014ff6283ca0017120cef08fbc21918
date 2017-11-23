@@ -682,7 +682,6 @@ public class Utility {
     public static void main(String[] args) {
     	double test1 = gamma(100);
     	double test2 = gamma(200);
-    	System.out.println(test2);
     	System.out.print(test1 / test2 * test1);
     }
 }

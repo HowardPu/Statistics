@@ -134,14 +134,9 @@ public class FDistribution extends PDF {
     	return coefficient * result;
     }
     
-    public double integral2(double x) {
-    	return(Utility.incompleteBeta(df1 / 2.0, df2 / 2.0, df1 * x / (df1 * x + df2)) / Utility.beta(df1 / 2.0, df2 / 2.0));
-    }
-    
     public static void main(String[] args) {
-    	FDistribution f = new FDistribution(30, 30);
+    	FDistribution f = new FDistribution(1000, 1000);
     	double test1 = f.cumulativeProbability(1, 2);
     	System.out.println(test1);
-    	System.out.println(f.integral2(2) - f.integral2(1));
     }
 }

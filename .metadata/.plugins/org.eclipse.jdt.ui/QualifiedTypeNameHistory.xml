@@ -2,4 +2,5 @@
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="distributions.DistributionFunction"/>
 <fullyQualifiedTypeName name="distributions.density_function.ChiSquare"/>
+<fullyQualifiedTypeName name="Utility.Utility"/>
 </qualifiedTypeNameHistroy>
